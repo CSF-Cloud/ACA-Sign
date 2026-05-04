@@ -48,7 +48,8 @@ ENV OPENSSL_CONF=/etc/openssl_legacy.cnf
 
 WORKDIR /app
 
-RUN apk add --no-cache libpq vips redis vips-heif onnxruntime
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && 
+    apk add --no-cache libpq vips redis vips-heif onnxruntime
 
 RUN addgroup -g 2000 acasign && adduser -u 2000 -G acasign -s /bin/sh -D -h /home/acasign acasign
 
@@ -71,7 +72,7 @@ RUN apk add --no-cache build-base git libpq-dev yaml-dev && bundle install && ap
 COPY --chown=acasign:acasign ./bin ./bin
 COPY --chown=acasign:acasign ./app ./app
 COPY --chown=acasign:acasign ./config ./config
-COPY --chown=acasign:acasign ./db/migrate ./db/migrate
+COPY --chown=acasign:acasign ./db ./db
 COPY --chown=acasign:acasign ./log ./log
 COPY --chown=acasign:acasign ./lib ./lib
 COPY --chown=acasign:acasign ./public ./public
@@ -96,4 +97,5 @@ ENV WORKDIR=/data/acasign
 ENV VIPS_MAX_COORD=17000
 
 EXPOSE 3000
+ENTRYPOINT ["/app/bin/docker-entrypoint"]
 CMD ["/app/bin/bundle", "exec", "puma", "-C", "/app/config/puma.rb", "--dir", "/app"]
