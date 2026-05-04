@@ -48,7 +48,7 @@ ENV OPENSSL_CONF=/etc/openssl_legacy.cnf
 
 WORKDIR /app
 
-RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && 
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \
     apk add --no-cache libpq vips redis vips-heif onnxruntime
 
 RUN addgroup -g 2000 acasign && adduser -u 2000 -G acasign -s /bin/sh -D -h /home/acasign acasign
