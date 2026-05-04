@@ -122,7 +122,7 @@ class ApplicationController < ActionController::Base
   end
 
   def maybe_redirect_com
-    return if request.domain != 'docuseal.co'
+    return if request.domain != 'acasign.co'
 
     redirect_to request.url.gsub('.co/', '.com/'), allow_other_host: true, status: :moved_permanently
   end
