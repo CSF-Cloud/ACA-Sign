@@ -91,9 +91,10 @@ RUN mkdir -p /app/public/fonts && ln -s /fonts/DancingScript-Regular.otf /app/pu
     bundle exec bootsnap precompile -j 1 --gemfile app/ lib/ && \
     chown -R acasign:acasign /app/tmp/cache
 
-WORKDIR /data/acasign
+RUN mkdir -p /data/acasign && chown acasign:acasign /data/acasign
 ENV HOME=/home/acasign
 ENV WORKDIR=/data/acasign
+WORKDIR /app
 ENV VIPS_MAX_COORD=17000
 
 EXPOSE 3000
