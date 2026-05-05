@@ -28,6 +28,7 @@ COPY ./package.json ./yarn.lock ./
 RUN yarn install --network-timeout 1000000
 
 COPY ./bin/shakapacker ./bin/shakapacker
+RUN chmod +x ./bin/shakapacker
 COPY ./config/webpack ./config/webpack
 COPY ./config/shakapacker.yml ./config/shakapacker.yml
 COPY ./postcss.config.js ./postcss.config.js
