@@ -86,6 +86,24 @@ if ENV['RAILS_ENV'] == 'production'
   end
 end
 
+# Ensure DATABASE_URL password is properly URI-encoded.
+# Special characters like [ ] { } | etc. in the password cause URI::InvalidURIError
+# during ActiveRecord initialization, which aborts class_attribute setup.
+if !ENV['DATABASE_URL'].to_s.empty?
+  require 'uri'
+
+  begin
+    URI.parse(ENV['DATABASE_URL'])
+  rescue URI::InvalidURIError
+    db_url = ENV['DATABASE_URL']
+
+    if (match = db_url.match(%r{\A([a-zA-Z][a-zA-Z0-9+\-.]*://[^/:]*:)([^@]+)(@.+)\z}))
+      encoded_password = match[2].gsub(/[^a-zA-Z0-9._~-]/) { |c| format('%%%02X', c.ord) }
+      ENV['DATABASE_URL'] = "#{match[1]}#{encoded_password}#{match[3]}"
+    end
+  end
+end
+
 if ENV['DATABASE_URL'].to_s.split('@').last.to_s.split('/').first.to_s.include?('_')
   require 'addressable'
 
